@@ -10,6 +10,7 @@ import { createContractor } from "./actions";
 const ROLES = [
   "GC",
   "Architect",
+  "Demolition",
   "Electrician",
   "Plumber",
   "HVAC",
