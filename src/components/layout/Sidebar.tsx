@@ -1,6 +1,5 @@
 "use client";
 
-import type { DashboardSummary } from "@/lib/dashboardSummary";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
