@@ -1,0 +1,95 @@
+Completed,Phase,Section,Item
+,PHASE 1: VISION + FEASIBILITY,Core decisions (you do these),Finalize concept (pickleball courts, golf sims, bar, seating, events)
+,PHASE 1: VISION + FEASIBILITY,Core decisions (you do these),Decide operating model (memberships, hourly play, leagues, events)
+,PHASE 1: VISION + FEASIBILITY,Core decisions (you do these),Alcohol decision confirmed (beer/wine only – good move)
+,PHASE 1: VISION + FEASIBILITY,Core decisions (you do these),Hours of operation (affects permits + neighbors)
+,PHASE 1: VISION + FEASIBILITY,Core decisions (you do these),Target customer (casual, league, corporate events, families, etc.)
+,PHASE 1: VISION + FEASIBILITY,Early advisors (talk before lease),Commercial real estate broker (sports/entertainment experience)
+,PHASE 1: VISION + FEASIBILITY,Early advisors (talk before lease),Business attorney (lease + entity setup)
+,PHASE 1: VISION + FEASIBILITY,Early advisors (talk before lease),Insurance broker (sports facilities are NOT standard policies)
+,PHASE 1: VISION + FEASIBILITY,Early advisors (talk before lease),Accountant (sales tax, alcohol tax, payroll setup)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Before signing a lease,Zoning check (pickleball + golf sim + bar allowed?)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Before signing a lease,Certificate of Occupancy (CO) status
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Before signing a lease,Parking requirements (critical for sports venues)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Before signing a lease,Ceiling height (golf sims = non-negotiable)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Before signing a lease,Floor load capacity (courts, concrete cuts)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Before signing a lease,Noise restrictions (pickleball pop is loud)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Before signing a lease,HVAC capacity (people + sims = heat)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Lease-specific items,TI allowance (tenant improvement money)
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Lease-specific items,Who pays for: Concrete cuts
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Lease-specific items,Who pays for: Plumbing stubs
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Lease-specific items,Who pays for: Electrical upgrades
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Lease-specific items,Who pays for: HVAC upgrades
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Lease-specific items,Build-out timeline written into lease
+,PHASE 2: SITE SELECTION + LANDLORD DUE DILIGENCE,Lease-specific items,Ability to franchise later (signage + branding rights)
+,PHASE 3: DESIGN + ENGINEERING,Professionals you'll need,Architect (commercial / assembly use)
+,PHASE 3: DESIGN + ENGINEERING,Professionals you'll need,MEP engineer: Mechanical (HVAC)
+,PHASE 3: DESIGN + ENGINEERING,Professionals you'll need,MEP engineer: Electrical
+,PHASE 3: DESIGN + ENGINEERING,Professionals you'll need,MEP engineer: Plumbing
+,PHASE 3: DESIGN + ENGINEERING,Professionals you'll need,Structural engineer (if cutting slab or mounting sims)
+,PHASE 3: DESIGN + ENGINEERING,Professionals you'll need,Interior designer (optional but helpful for flow + vibe)
+,PHASE 3: DESIGN + ENGINEERING,Design deliverables,Space layout (courts, sims, bar, seating, storage)
+,PHASE 3: DESIGN + ENGINEERING,Design deliverables,Electrical plan (sims, lighting, POS, TVs)
+,PHASE 3: DESIGN + ENGINEERING,Design deliverables,Plumbing plan (bar sinks, bathrooms, mop sink)
+,PHASE 3: DESIGN + ENGINEERING,Design deliverables,Fire & life safety plan
+,PHASE 3: DESIGN + ENGINEERING,Design deliverables,ADA compliance plan
+,PHASE 3: DESIGN + ENGINEERING,Design deliverables,Sound mitigation plan (huge for pickleball)
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Building permit
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Electrical permit
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Plumbing permit
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Mechanical permit
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Fire marshal approval
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Health department (bar / beverages)
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Alcohol license (beer & wine)
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Sign permit
+,PHASE 4: PERMITS + APPROVALS,Permits you'll likely need,Certificate of Occupancy (final)
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,General contractor (GC) – quarterback of the job
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Demo contractor
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Concrete contractor
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Plumber
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Electrician
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,HVAC contractor
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Low-voltage contractor (internet, TVs, cameras)
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Fire sprinkler contractor (if required)
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Sound/acoustic contractor
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Flooring installer
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Painter
+,PHASE 5: CONSTRUCTION + BUILD-OUT,Contractors involved,Millwork/carpentry (bar, counters)
+,PHASE 5: CONSTRUCTION + BUILD-OUT,During construction,Weekly site meetings
+,PHASE 5: CONSTRUCTION + BUILD-OUT,During construction,City inspections at each phase
+,PHASE 5: CONSTRUCTION + BUILD-OUT,During construction,Equipment rough-in checks (golf sims!)
+,PHASE 5: CONSTRUCTION + BUILD-OUT,During construction,Punch list at the end
+,PHASE 6: EQUIPMENT + SYSTEMS,Sports & facility equipment,Pickleball courts (surface, nets, fencing)
+,PHASE 6: EQUIPMENT + SYSTEMS,Sports & facility equipment,Golf simulators (screens, projectors, sensors)
+,PHASE 6: EQUIPMENT + SYSTEMS,Sports & facility equipment,Ball containment / safety systems
+,PHASE 6: EQUIPMENT + SYSTEMS,Sports & facility equipment,Lighting (court-grade, non-glare)
+,PHASE 6: EQUIPMENT + SYSTEMS,Sports & facility equipment,Seating & furniture
+,PHASE 6: EQUIPMENT + SYSTEMS,Tech & operations,POS system
+,PHASE 6: EQUIPMENT + SYSTEMS,Tech & operations,Membership software
+,PHASE 6: EQUIPMENT + SYSTEMS,Tech & operations,Booking/reservation system
+,PHASE 6: EQUIPMENT + SYSTEMS,Tech & operations,Wi-Fi & networking
+,PHASE 6: EQUIPMENT + SYSTEMS,Tech & operations,Security cameras
+,PHASE 6: EQUIPMENT + SYSTEMS,Tech & operations,Sound system
+,PHASE 6: EQUIPMENT + SYSTEMS,Tech & operations,TVs
+,PHASE 7: STAFFING + OPERATIONS,People,General manager
+,PHASE 7: STAFFING + OPERATIONS,People,Front desk / court attendants
+,PHASE 7: STAFFING + OPERATIONS,People,Bar staff (beer/wine certified)
+,PHASE 7: STAFFING + OPERATIONS,People,League / event coordinator
+,PHASE 7: STAFFING + OPERATIONS,People,Cleaning crew
+,PHASE 7: STAFFING + OPERATIONS,Policies,Waivers & liability forms
+,PHASE 7: STAFFING + OPERATIONS,Policies,League rules
+,PHASE 7: STAFFING + OPERATIONS,Policies,Alcohol policies
+,PHASE 7: STAFFING + OPERATIONS,Policies,Emergency procedures
+,PHASE 7: STAFFING + OPERATIONS,Policies,Maintenance schedules
+,PHASE 8: INSURANCE + LEGAL,Items,General liability
+,PHASE 8: INSURANCE + LEGAL,Items,Participant injury coverage
+,PHASE 8: INSURANCE + LEGAL,Items,Liquor liability (even beer/wine)
+,PHASE 8: INSURANCE + LEGAL,Items,Workers comp
+,PHASE 8: INSURANCE + LEGAL,Items,Equipment insurance
+,PHASE 8: INSURANCE + LEGAL,Items,Franchise-friendly entity structure (future-proofing)
+,PHASE 9: PRE-OPEN + LAUNCH,Items,Soft opening
+,PHASE 9: PRE-OPEN + LAUNCH,Items,Friends & family night
+,PHASE 9: PRE-OPEN + LAUNCH,Items,League signups
+,PHASE 9: PRE-OPEN + LAUNCH,Items,Membership pre-sales
+,PHASE 9: PRE-OPEN + LAUNCH,Items,Grand opening event
+,PHASE 9: PRE-OPEN + LAUNCH,Items,Local partnerships

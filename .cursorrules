@@ -1,0 +1,13 @@
+Build a Next.js App Router dashboard webapp.
+
+Use TypeScript and Tailwind.
+
+Use a sidebar layout for authenticated routes.
+
+All routes under /dashboard require login.
+
+Prefer simple, readable components.
+
+Do not invent data models; ask or propose defaults for tasks/budgets/projects.
+
+(These rules apply to Chat + Cmd/K style generation.)

@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3f4f6;
+  --foreground: #0f172a;
+  --muted: #f9fafb;
+  --muted-foreground: #64748b;
+  --border: #e5e7eb;
+  --ring: #94a3b8;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.06), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  /* Darker secondary text for better readability */
+  --color-slate-500: #475569;
+  --color-slate-400: #64748b;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-weight: 500;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.625;
+}
+
+/* Card surface - consistent elevation hierarchy */
+.card {
+  @apply rounded-lg border border-slate-200/60 bg-white shadow-sm;
+  transition: box-shadow var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* KPI card - elevated, no border, numbers dominate */
+.kpi-card {
+  @apply rounded-lg bg-white p-6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Transitions - apply to interactive elements */
+.transition-smooth {
+  transition: color var(--transition), background-color var(--transition),
+    border-color var(--transition), box-shadow var(--transition),
+    opacity var(--transition), transform var(--transition);
+}
+
+/* Primary button - forest green, consistent across app */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white;
+  background-color: #0F3D2E;
+  transition: background-color var(--transition), opacity var(--transition);
+}
+
+.btn-primary:hover {
+  background-color: #0d3528;
+}
+
+.btn-primary:focus-visible {
+  @apply outline-none ring-2 ring-slate-200 ring-offset-2;
+}
+
+.btn-primary:disabled {
+  @apply opacity-50;
+}
+
+/* Secondary button */
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-lg border bg-white px-4 py-2.5 text-sm font-medium text-slate-700;
+  border-color: var(--border);
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.btn-secondary:hover {
+  @apply bg-slate-50 text-slate-900;
+  border-color: #d1d5db;
+}
+
+.btn-secondary:focus-visible {
+  @apply outline-none ring-2 ring-slate-200 ring-offset-2;
+}
+
+/* Input base - consistent focus ring */
+.input-base {
+  @apply w-full rounded-lg border bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400;
+  border-color: var(--border);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.input-base:focus {
+  @apply border-slate-500 outline-none ring-2 ring-slate-200;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
