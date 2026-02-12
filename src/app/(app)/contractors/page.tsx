@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentProject } from "@/lib/currentProject";
+import { getDashboardSummary } from "@/lib/dashboardSummary";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ContractorsClient } from "./ContractorsClient";
@@ -11,13 +11,12 @@ export default async function ContractorsPage({
 }) {
   const { open } = await searchParams;
   const supabase = await createClient();
+  const { project } = await getDashboardSummary();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-
-  const project = await getCurrentProject();
 
   if (!project) {
     return (

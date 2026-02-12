@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentProject } from "@/lib/currentProject";
+import { getDashboardSummary } from "@/lib/dashboardSummary";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { MasterPlanClient } from "./MasterPlanClient";
@@ -12,13 +12,12 @@ export default async function MasterPlanPage({
 }) {
   const { phase: phaseId } = await searchParams;
   const supabase = await createClient();
+  const { project } = await getDashboardSummary();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-
-  const project = await getCurrentProject();
 
   if (!project) {
     return (
@@ -37,28 +36,32 @@ export default async function MasterPlanPage({
     );
   }
 
-  const { data: phases } = await supabase
-    .from("phases")
-    .select("id, title, phase_order")
-    .eq("project_id", project.id)
-    .order("phase_order", { ascending: true });
+  const [phasesRes, sectionsRes, itemsRes, membersRes] = await Promise.all([
+    supabase
+      .from("phases")
+      .select("id, title, phase_order")
+      .eq("project_id", project.id)
+      .order("phase_order", { ascending: true }),
+    supabase
+      .from("phase_sections")
+      .select("id, phase_id, title, section_order")
+      .eq("project_id", project.id)
+      .order("section_order", { ascending: true }),
+    supabase
+      .from("phase_items")
+      .select("id, section_id, title, is_completed, notes, item_order, assignee_user_id, assignee_name, created_at, completed_at")
+      .eq("project_id", project.id)
+      .order("item_order", { ascending: true }),
+    supabase
+      .from("project_members")
+      .select("user_id")
+      .eq("project_id", project.id),
+  ]);
 
-  const { data: sections } = await supabase
-    .from("phase_sections")
-    .select("id, phase_id, title, section_order")
-    .eq("project_id", project.id)
-    .order("section_order", { ascending: true });
-
-  const { data: items } = await supabase
-    .from("phase_items")
-    .select("id, section_id, title, is_completed, notes, item_order, assignee_user_id, assignee_name, created_at, completed_at")
-    .eq("project_id", project.id)
-    .order("item_order", { ascending: true });
-
-  const { data: members } = await supabase
-    .from("project_members")
-    .select("user_id")
-    .eq("project_id", project.id);
+  const { data: phases } = phasesRes;
+  const { data: sections } = sectionsRes;
+  const { data: items } = itemsRes;
+  const { data: members } = membersRes;
 
   const memberIds = members?.map((m) => m.user_id) ?? [];
   const { data: profiles } =

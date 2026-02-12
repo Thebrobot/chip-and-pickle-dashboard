@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentProject } from "@/lib/currentProject";
+import { getDashboardSummary } from "@/lib/dashboardSummary";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TasksClient } from "./TasksClient";
@@ -11,13 +11,12 @@ export default async function TasksPage({
 }) {
   const { open } = await searchParams;
   const supabase = await createClient();
+  const { project } = await getDashboardSummary();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-
-  const project = await getCurrentProject();
 
   if (!project) {
     return (
@@ -36,19 +35,22 @@ export default async function TasksPage({
     );
   }
 
-  const { data: tasks } = await supabase
-    .from("tasks")
-    .select("id, title, description, status, priority, due_date, assignee_user_id, completed_at, created_at")
-    .eq("project_id", project.id)
-    .order("priority", { ascending: true }) // high=1, medium=2, low=3 after we map
-    .order("due_date", { ascending: true, nullsFirst: false })
-    .order("created_at", { ascending: true });
+  const [tasksRes, membersRes] = await Promise.all([
+    supabase
+      .from("tasks")
+      .select("id, title, description, status, priority, due_date, assignee_user_id, completed_at, created_at")
+      .eq("project_id", project.id)
+      .order("priority", { ascending: true })
+      .order("due_date", { ascending: true, nullsFirst: false })
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("project_members")
+      .select("user_id")
+      .eq("project_id", project.id),
+  ]);
 
-  const { data: members } = await supabase
-    .from("project_members")
-    .select("user_id")
-    .eq("project_id", project.id);
-
+  const { data: tasks } = tasksRes;
+  const { data: members } = membersRes;
   const memberIds = members?.map((m) => m.user_id) ?? [];
   const { data: profiles } =
     memberIds.length > 0

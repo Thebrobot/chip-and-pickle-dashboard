@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { ActionSheet } from "@/components/ui/ActionSheet";
 
 const tabs = [
@@ -99,19 +99,8 @@ function PlusIcon({ className }: { className?: string }) {
 
 export function MobileNav() {
   const pathname = usePathname();
-  const router = useRouter();
   const [fabOpen, setFabOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
-
-  function handleFabAction(href: string) {
-    setFabOpen(false);
-    router.push(href);
-  }
-
-  function handleMoreNavigation(href: string) {
-    setMoreOpen(false);
-    router.push(href);
-  }
 
   return (
     <>
@@ -119,14 +108,14 @@ export function MobileNav() {
       <ActionSheet open={fabOpen} onClose={() => setFabOpen(false)}>
         <div className="space-y-1">
           {fabActions.map((action) => (
-            <button
+            <Link
               key={action.href}
-              type="button"
-              onClick={() => handleFabAction(action.href)}
+              href={action.href}
+              onClick={() => setFabOpen(false)}
               className="flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium text-slate-700 transition-colors active:bg-slate-50 hover:bg-slate-50 hover:text-[#0F3D2E]"
             >
               {action.label}
-            </button>
+            </Link>
           ))}
         </div>
       </ActionSheet>
@@ -137,15 +126,15 @@ export function MobileNav() {
           {moreItems.map((item) => {
             const Icon = item.icon;
             return (
-              <button
+              <Link
                 key={item.href}
-                type="button"
-                onClick={() => handleMoreNavigation(item.href)}
+                href={item.href}
+                onClick={() => setMoreOpen(false)}
                 className="flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-sm font-medium text-slate-700 transition-colors active:bg-slate-50 hover:bg-slate-50 hover:text-[#0F3D2E]"
               >
                 <Icon className="h-5 w-5 shrink-0" />
                 {item.label}
-              </button>
+              </Link>
             );
           })}
         </div>

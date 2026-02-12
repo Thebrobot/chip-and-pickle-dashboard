@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentProject } from "@/lib/currentProject";
+import { getDashboardSummary } from "@/lib/dashboardSummary";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -31,87 +31,90 @@ function isThisWeek(dateStr: string | null): boolean {
 
 export default async function DashboardPage() {
   const supabase = await createClient();
+  const { project } = await getDashboardSummary();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const project = await getCurrentProject();
+  if (!project) {
+    return (
+      <div className="space-y-6">
+        <PageHeader title="Dashboard" subtitle="Construction Command Center" />
+        <div className="card p-8 text-center">
+          <p className="text-slate-600">No project found.</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-slate-500">
+            Create or join a project first.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-  const { data: phases } = project
-    ? await supabase
-        .from("phases")
-        .select("id, title, phase_order")
-        .eq("project_id", project.id)
-        .order("phase_order", { ascending: true })
-    : { data: null };
+  const [
+    phasesRes,
+    sectionsRes,
+    itemsRes,
+    tasksRes,
+    budgetItemsRes,
+    contractorsRes,
+    recentTasksRes,
+    projectMembersRes,
+  ] = await Promise.all([
+    supabase
+      .from("phases")
+      .select("id, title, phase_order")
+      .eq("project_id", project.id)
+      .order("phase_order", { ascending: true }),
+    supabase
+      .from("phase_sections")
+      .select("id, phase_id, section_order")
+      .eq("project_id", project.id)
+      .order("section_order", { ascending: true }),
+    supabase
+      .from("phase_items")
+      .select("id, phase_id, section_id, item_order, title, is_completed")
+      .eq("project_id", project.id),
+    supabase
+      .from("tasks")
+      .select("id, title, status, priority, due_date, updated_at")
+      .eq("project_id", project.id)
+      .neq("status", "done")
+      .order("priority", { ascending: true })
+      .order("due_date", { ascending: true, nullsFirst: false }),
+    supabase
+      .from("budget_items")
+      .select("forecast_amount, actual_amount")
+      .eq("project_id", project.id),
+    supabase
+      .from("contractors")
+      .select("id, name, role")
+      .eq("project_id", project.id)
+      .order("created_at", { ascending: false })
+      .limit(5),
+    supabase
+      .from("tasks")
+      .select("id, title, status, updated_at, assignee_user_id")
+      .eq("project_id", project.id)
+      .order("updated_at", { ascending: false, nullsFirst: false })
+      .limit(5),
+    supabase
+      .from("project_members")
+      .select("user_id")
+      .eq("project_id", project.id),
+  ]);
 
-  const { data: sections } = project
-    ? await supabase
-        .from("phase_sections")
-        .select("id, phase_id, section_order")
-        .eq("project_id", project.id)
-        .order("section_order", { ascending: true })
-    : { data: null };
-
-  const { data: items } = project
-    ? await supabase
-        .from("phase_items")
-        .select("id, phase_id, section_id, item_order, title, is_completed")
-        .eq("project_id", project.id)
-    : { data: null };
-
-  // Fetch tasks with priority for attention section
-  const { data: tasks } = project
-    ? await supabase
-        .from("tasks")
-        .select("id, title, status, priority, due_date, updated_at")
-        .eq("project_id", project.id)
-        .neq("status", "done")
-        .order("priority", { ascending: true })
-        .order("due_date", { ascending: true, nullsFirst: false })
-    : { data: null };
-
-  // Fetch budget data
-  const { data: budgetItems } = project
-    ? await supabase
-        .from("budget_items")
-        .select("forecast_amount, actual_amount")
-        .eq("project_id", project.id)
-    : { data: null };
-
-  // Fetch contractors
-  const { data: contractors } = project
-    ? await supabase
-        .from("contractors")
-        .select("id, name, role")
-        .eq("project_id", project.id)
-        .order("created_at", { ascending: false })
-        .limit(5)
-    : { data: null };
-
-  // Recent activity (recently updated tasks)
-  const { data: recentTasks } = project
-    ? await supabase
-        .from("tasks")
-        .select("id, title, status, updated_at, assignee_user_id")
-        .eq("project_id", project.id)
-        .order("updated_at", { ascending: false, nullsFirst: false })
-        .limit(5)
-    : { data: null };
-
-  // Fetch project members to get their profiles
-  const { data: projectMembers } = project
-    ? await supabase
-        .from("project_members")
-        .select("user_id")
-        .eq("project_id", project.id)
-    : { data: null };
+  const { data: phases } = phasesRes;
+  const { data: sections } = sectionsRes;
+  const { data: items } = itemsRes;
+  const { data: tasks } = tasksRes;
+  const { data: budgetItems } = budgetItemsRes;
+  const { data: contractors } = contractorsRes;
+  const { data: recentTasks } = recentTasksRes;
+  const { data: projectMembers } = projectMembersRes;
 
   const memberIds = projectMembers?.map((m) => m.user_id) ?? [];
-
-  // Fetch profiles for project members
   const { data: taskProfiles } =
     memberIds.length > 0
       ? await supabase

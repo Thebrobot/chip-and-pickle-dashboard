@@ -1,17 +1,16 @@
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentProject } from "@/lib/currentProject";
+import { getDashboardSummary } from "@/lib/dashboardSummary";
 import { redirect } from "next/navigation";
 import { TeamClient } from "./TeamClient";
 
 export default async function TeamSettingsPage() {
   const supabase = await createClient();
+  const { project } = await getDashboardSummary();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
-
-  const project = await getCurrentProject();
 
   if (!project) {
     return (
@@ -31,10 +30,21 @@ export default async function TeamSettingsPage() {
     );
   }
 
-  const { data: projectMembers } = await supabase
-    .from("project_members")
-    .select("user_id, role")
-    .eq("project_id", project.id);
+  const [projectMembersRes, currentMembershipRes] = await Promise.all([
+    supabase
+      .from("project_members")
+      .select("user_id, role")
+      .eq("project_id", project.id),
+    supabase
+      .from("project_members")
+      .select("role")
+      .eq("project_id", project.id)
+      .eq("user_id", user.id)
+      .single(),
+  ]);
+
+  const { data: projectMembers } = projectMembersRes;
+  const { data: currentMembership } = currentMembershipRes;
 
   const userIds = projectMembers?.map((m) => m.user_id) ?? [];
   const { data: profiles } =
@@ -71,12 +81,6 @@ export default async function TeamSettingsPage() {
     };
   });
 
-  const { data: currentMembership } = await supabase
-    .from("project_members")
-    .select("role")
-    .eq("project_id", project.id)
-    .eq("user_id", user.id)
-    .single();
   const isOwner = currentMembership?.role === "owner";
 
   return (

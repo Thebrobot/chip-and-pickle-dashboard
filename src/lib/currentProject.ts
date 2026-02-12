@@ -1,41 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
+import { getDashboardSummary } from "@/lib/dashboardSummary";
 
-export type CurrentProject = {
-  id: string;
-  name: string;
-  target_open_date?: string | null;
-};
+export type { CurrentProject } from "@/lib/dashboardSummary";
 
 /**
  * Returns the current project for the logged-in user.
- * - If only 1 project exists, use it.
- * - If multiple exist, choose the most recently created as default.
- * Returns null if user is not authenticated or has no projects.
+ * Uses cached getDashboardSummary for request deduplication.
  */
-export async function getCurrentProject(): Promise<CurrentProject | null> {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
-
-  const { data: memberships } = await supabase
-    .from("project_members")
-    .select("project_id")
-    .eq("user_id", user.id);
-
-  const projectIds = memberships?.map((m) => m.project_id) ?? [];
-  if (projectIds.length === 0) return null;
-
-  const { data: project } = await supabase
-    .from("projects")
-    .select("id, name, target_open_date")
-    .in("id", projectIds)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
+export async function getCurrentProject() {
+  const { project } = await getDashboardSummary();
   return project;
 }
 

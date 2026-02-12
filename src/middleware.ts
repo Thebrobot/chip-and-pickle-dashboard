@@ -3,11 +3,12 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const protectedPaths = [
   "/dashboard",
-  "/projects",
-  "/tasks",
-  "/budget",
-  "/contractors",
   "/master-plan",
+  "/tasks",
+  "/contractors",
+  "/budget",
+  "/projects",
+  "/team",
   "/settings",
 ];
 const authPaths = ["/login", "/register"];
@@ -75,6 +76,26 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/",
+    "/login",
+    "/login/:path*",
+    "/register",
+    "/register/:path*",
+    "/dashboard",
+    "/dashboard/:path*",
+    "/master-plan",
+    "/master-plan/:path*",
+    "/tasks",
+    "/tasks/:path*",
+    "/contractors",
+    "/contractors/:path*",
+    "/budget",
+    "/budget/:path*",
+    "/projects",
+    "/projects/:path*",
+    "/team",
+    "/team/:path*",
+    "/settings",
+    "/settings/:path*",
   ],
 };
