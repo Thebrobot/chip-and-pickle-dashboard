@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
 
+export const revalidate = 60;
+
 function isOverdue(dateStr: string | null): boolean {
   if (!dateStr) return false;
   const date = new Date(dateStr);

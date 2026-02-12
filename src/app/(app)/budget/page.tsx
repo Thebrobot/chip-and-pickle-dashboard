@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { BudgetClient } from "./BudgetClient";
 
+export const revalidate = 60;
+
 export default async function BudgetPage({
   searchParams,
 }: {

@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TasksClient } from "./TasksClient";
 
+export const revalidate = 60;
+
 export default async function TasksPage({
   searchParams,
 }: {

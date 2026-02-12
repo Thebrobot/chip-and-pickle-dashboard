@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
-import { createTask, updateTask, updateTaskStatus } from "./actions";
+import { createTask, updateTask, updateTaskStatus, deleteTask } from "./actions";
 
 interface Task {
   id: string;
@@ -124,6 +124,7 @@ export function TasksClient({
   const [dueDate, setDueDate] = useState("");
   const [assigneeUserId, setAssigneeUserId] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -222,6 +223,22 @@ export function TasksClient({
       router.refresh();
     } finally {
       setTogglingId(null);
+    }
+  }
+
+  async function handleDeleteTask() {
+    if (!editingTask) return;
+    if (!confirm("Delete this task? This cannot be undone.")) return;
+    setDeletingId(editingTask.id);
+    setError(null);
+    try {
+      await deleteTask(editingTask.id);
+      handleCloseModal();
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete task");
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -335,9 +352,28 @@ export function TasksClient({
               Cancel
             </Button>
             <Button type="submit" disabled={submitting}>
-              {submitting ? "Creating..." : "Create task"}
+              {submitting
+                ? editingTask
+                  ? "Saving..."
+                  : "Creating..."
+                : editingTask
+                  ? "Save changes"
+                  : "Create task"}
             </Button>
           </div>
+          {editingTask && (
+            <div className="mt-4 border-t border-slate-200 pt-4">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleDeleteTask}
+                disabled={deletingId !== null}
+                className="text-red-600 hover:bg-red-50 hover:text-red-700"
+              >
+                {deletingId ? "Deleting..." : "Delete task"}
+              </Button>
+            </div>
+          )}
         </form>
       </Modal>
 

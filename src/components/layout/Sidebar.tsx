@@ -1,5 +1,6 @@
 "use client";
 
+import type { DashboardSummary } from "@/lib/dashboardSummary";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -91,7 +92,7 @@ function NavIcon({ open }: { open: boolean }) {
   );
 }
 
-export function Sidebar({ summary }: { summary: DashboardSummary }) {
+export function Sidebar({ summary }: { summary?: DashboardSummary } = {}) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
