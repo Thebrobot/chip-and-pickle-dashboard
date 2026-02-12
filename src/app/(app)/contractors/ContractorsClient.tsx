@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/Modal";
-import { createContractor } from "./actions";
+import { createContractor, updateContractor, deleteContractor } from "./actions";
 
 const ROLES = [
   "GC",
@@ -53,6 +53,7 @@ export function ContractorsClient({
   openModal = false,
 }: ContractorsClientProps) {
   const [modalOpen, setModalOpen] = useState(openModal);
+  const [editingContractor, setEditingContractor] = useState<Contractor | null>(null);
 
   useEffect(() => {
     if (openModal) setModalOpen(true);
@@ -65,6 +66,7 @@ export function ContractorsClient({
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -81,11 +83,47 @@ export function ContractorsClient({
     setPhone("");
     setNotes("");
     setError(null);
+    setEditingContractor(null);
   }
 
   function handleCloseModal() {
     setModalOpen(false);
     resetForm();
+  }
+
+  function handleEditContractor(c: Contractor) {
+    setEditingContractor(c);
+    setName(c.name);
+    setCompany(c.company ?? "");
+    setRole(ROLES.includes(c.role ?? "") ? (c.role as string) : ROLES[0]);
+    setEmail(c.email ?? "");
+    setPhone(c.phone ?? "");
+    setNotes(c.notes ?? "");
+    setError(null);
+    setModalOpen(true);
+  }
+
+  async function handleDelete() {
+    if (!editingContractor) return;
+    if (!confirm(`Delete ${editingContractor.name}? This cannot be undone.`)) return;
+    setDeleting(true);
+    setError(null);
+    try {
+      await deleteContractor(projectId, editingContractor.id);
+      handleCloseModal();
+      router.refresh();
+    } catch (err) {
+      console.error("Delete contractor error:", err);
+      if (err && typeof err === "object" && "message" in err) {
+        setError(String((err as Error).message));
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to delete contractor");
+      }
+    } finally {
+      setDeleting(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -94,25 +132,35 @@ export function ContractorsClient({
     setSubmitting(true);
     setError(null);
     try {
-      await createContractor(projectId, {
-        name: name.trim(),
-        company: company.trim() || null,
-        role: role.trim() || null,
-        email: email.trim() || null,
-        phone: phone.trim() || null,
-        notes: notes.trim() || null,
-      });
+      if (editingContractor) {
+        await updateContractor(projectId, editingContractor.id, {
+          name: name.trim(),
+          company: company.trim() || null,
+          role: role.trim() || null,
+          email: email.trim() || null,
+          phone: phone.trim() || null,
+          notes: notes.trim() || null,
+        });
+      } else {
+        await createContractor(projectId, {
+          name: name.trim(),
+          company: company.trim() || null,
+          role: role.trim() || null,
+          email: email.trim() || null,
+          phone: phone.trim() || null,
+          notes: notes.trim() || null,
+        });
+      }
       handleCloseModal();
       router.refresh();
     } catch (err) {
-      console.error("Create contractor error:", err);
-      // Parse Supabase error
-      if (err && typeof err === 'object' && 'message' in err) {
-        setError(String((err as any).message));
+      console.error("Create/update contractor error:", err);
+      if (err && typeof err === "object" && "message" in err) {
+        setError(String((err as Error).message));
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("Failed to create contractor");
+        setError("Failed to save contractor");
       }
     } finally {
       setSubmitting(false);
@@ -124,13 +172,22 @@ export function ContractorsClient({
       <PageHeader
         title="Contractors"
         subtitle={`Manage contacts for ${projectName}`}
-        action={<Button onClick={() => setModalOpen(true)}>New Contractor</Button>}
+        action={
+          <Button
+            onClick={() => {
+              resetForm();
+              setModalOpen(true);
+            }}
+          >
+            New Contractor
+          </Button>
+        }
       />
 
       <Modal
         open={modalOpen}
         onClose={handleCloseModal}
-        title="New Contractor"
+        title={editingContractor ? "Edit Contractor" : "New Contractor"}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
@@ -242,17 +299,38 @@ export function ContractorsClient({
               className="input-base resize-none"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handleCloseModal}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={submitting}>
-              {submitting ? "Adding..." : "Add contractor"}
-            </Button>
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-2">
+            <div>
+              {editingContractor && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                  onClick={handleDelete}
+                  disabled={submitting || deleting}
+                >
+                  {deleting ? "Deleting..." : "Delete"}
+                </Button>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting
+                  ? editingContractor
+                    ? "Saving..."
+                    : "Adding..."
+                  : editingContractor
+                    ? "Save changes"
+                    : "Add contractor"}
+              </Button>
+            </div>
           </div>
         </form>
       </Modal>
@@ -281,7 +359,13 @@ export function ContractorsClient({
             <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-slate-500">
               Add your first contractor to build your contact directory.
             </p>
-            <Button onClick={() => setModalOpen(true)} className="mt-6">
+            <Button
+              onClick={() => {
+                resetForm();
+                setModalOpen(true);
+              }}
+              className="mt-6"
+            >
               New Contractor
             </Button>
           </div>
@@ -362,6 +446,16 @@ export function ContractorsClient({
                           <p className="text-sm text-slate-700 leading-relaxed">{c.notes}</p>
                         </div>
                       )}
+
+                      <div className="pt-3 border-t border-slate-100">
+                        <Button
+                          variant="secondary"
+                          onClick={() => handleEditContractor(c)}
+                          className="w-full text-sm py-2"
+                        >
+                          Edit
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
